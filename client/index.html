@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secure Couple Chat</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+🎮 Secure Couple Chat
+</header>
+
+<div class="room">
+
+<input id="room" placeholder="Enter Room Code">
+
+<button onclick="joinRoom()">Join Room</button>
+
+</div>
+
+<div id="chat"></div>
+
+<div id="typing"></div>
+
+<div class="inputArea">
+
+<input id="message" placeholder="Type message">
+
+<button onclick="sendMessage()">Send</button>
+
+<label for="imageFile">Choose image to send:</label>
+<input type="file" id="imageFile">
+<button onclick="sendImage()">Send Image</button>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
