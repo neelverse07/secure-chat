@@ -1,4 +1,4 @@
-const socket = io("https://secure-nine-chat.netlify.app/")
+const socket = io("https://secure-chat-es7i.onrender.com/")
 
 let room = ""
 let username = ""

@@ -51,8 +51,15 @@ socket.join(room)
 })
 
 socket.on("send-message",(data)=>{
-io.to(data.room).emit("receive-message",data)
+
+io.to(data.room).emit("receive-message",{
+room: data.room,
+message: data.message,
+sender: data.sender
 })
+
+})
+
 
 socket.on("typing",(room)=>{
 socket.to(room).emit("typing")
