@@ -21,7 +21,7 @@ function sendMessage(){
 
 let msg = document.getElementById("message").value
 
-if(msg === "") return
+if(msg.trim()==="") return
 
 socket.emit("send-message",{
 room:room,

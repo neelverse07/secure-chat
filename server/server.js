@@ -53,9 +53,9 @@ socket.join(room)
 socket.on("send-message",(data)=>{
 
 io.to(data.room).emit("receive-message",{
-room: data.room,
-message: data.message,
-sender: data.sender
+room:data.room,
+message:data.message,
+sender:data.sender
 })
 
 })
