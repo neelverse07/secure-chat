@@ -1,4 +1,4 @@
-const socket = io("http://localhost:3000")
+const socket = io("https://secure-chat-es7i.onrender.com/")
 
 let room = ""
 
@@ -76,7 +76,7 @@ let formData=new FormData()
 
 formData.append("image",file)
 
-let response=await fetch("http://localhost:3000/upload",{
+let response=await fetch("https://secure-chat-es7i.onrender.com/upload",{
 method:"POST",
 body:formData
 })
