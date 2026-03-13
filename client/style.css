@@ -1,7 +1,7 @@
 body{
 background:#0a0a0a;
 color:white;
-font-family:Arial;
+font-family:Segoe UI;
 margin:0;
 }
 
@@ -14,35 +14,92 @@ box-shadow:0 0 10px cyan;
 }
 
 .room{
-text-align:center;
-margin:20px;
+display:flex;
+gap:10px;
+justify-content:center;
+padding:10px;
 }
 
 #chat{
-height:60vh;
-overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:12px;
 padding:20px;
+height:70vh;
+overflow-y:auto;
 }
+
+/* message bubble */
 
 .message{
-background:#111;
-border:1px solid cyan;
-padding:10px;
-margin:10px;
-border-radius:10px;
+padding:12px;
+border-radius:12px;
 max-width:60%;
-animation:fade .3s;
+display:flex;
+flex-direction:column;
+animation:fade .2s ease;
 }
 
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(10px);
+/* your message */
+
+.myMessage{
+background:#00bcd4;
+color:black;
+align-self:flex-end;
 }
-to{
-opacity:1;
+
+/* partner message */
+
+.otherMessage{
+background:#1e1e1e;
+border:1px solid cyan;
+align-self:flex-start;
 }
+
+.msgHeader{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:12px;
+font-weight:bold;
+margin-bottom:5px;
 }
+
+.avatar{
+width:20px;
+height:20px;
+border-radius:50%;
+}
+
+.msgText{
+font-size:15px;
+}
+
+.msgFooter{
+display:flex;
+justify-content:space-between;
+font-size:10px;
+margin-top:5px;
+opacity:.8;
+}
+
+.msgTime{
+font-size:10px;
+}
+
+.ticks{
+color:#00ff90;
+}
+
+/* typing indicator */
+
+#typing{
+padding-left:20px;
+font-size:13px;
+color:cyan;
+}
+
+/* input area */
 
 .inputArea{
 position:fixed;
@@ -59,6 +116,7 @@ padding:10px;
 background:#000;
 border:1px solid cyan;
 color:white;
+flex:1;
 }
 
 button{
@@ -72,7 +130,28 @@ button:hover{
 box-shadow:0 0 10px cyan;
 }
 
-#typing{
-color:cyan;
-margin-left:20px;
+/* animation */
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+}
+}
+
+/* mobile responsive */
+
+@media(max-width:600px){
+
+.message{
+max-width:80%;
+}
+
+.room{
+flex-direction:column;
+}
+
 }

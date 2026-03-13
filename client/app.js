@@ -1,10 +1,17 @@
-const socket = io("https://secure-chat-es7i.onrender.com/")
+const socket = io("https://secure-nine-chat.netlify.app/")
 
 let room = ""
+let username = ""
 
 function joinRoom(){
 
+username = document.getElementById("username").value
 room = document.getElementById("room").value
+
+if(username === "" || room === ""){
+alert("Enter name and room")
+return
+}
 
 socket.emit("join-room",room)
 
@@ -18,7 +25,8 @@ if(msg === "") return
 
 socket.emit("send-message",{
 room:room,
-message:msg
+message:msg,
+sender:username
 })
 
 document.getElementById("message").value=""
@@ -29,27 +37,31 @@ socket.on("receive-message",(data)=>{
 
 let div = document.createElement("div")
 
-div.className="message"
+let currentUser = username === data.sender
 
-if(data.message.startsWith("http")){
+div.className = currentUser ? "message myMessage" : "message otherMessage"
 
-let img=document.createElement("img")
+let time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
 
-img.src=data.message
+div.innerHTML = `
 
-img.style.width="200px"
+<div class="msgHeader">
+<img src="https://api.dicebear.com/7.x/initials/svg?seed=${data.sender}" class="avatar">
+${data.sender}
+</div>
 
-div.appendChild(img)
+<div class="msgText">${data.message}</div>
 
-}else{
-
-div.innerText=data.message
-
-}
+<div class="msgFooter">
+<span class="msgTime">${time}</span>
+<span class="ticks">✔✔</span>
+</div>
+`
 
 document.getElementById("chat").appendChild(div)
 
-socket.emit("read",room)
+document.getElementById("chat").scrollTop =
+document.getElementById("chat").scrollHeight
 
 })
 
@@ -68,24 +80,3 @@ document.getElementById("typing").innerText=""
 },2000)
 
 })
-async function sendImage(){
-
-let file=document.getElementById("imageFile").files[0]
-
-let formData=new FormData()
-
-formData.append("image",file)
-
-let response=await fetch("https://secure-chat-es7i.onrender.com/upload",{
-method:"POST",
-body:formData
-})
-
-let data=await response.json()
-
-socket.emit("send-message",{
-room:room,
-message:data.url
-})
-
-}
