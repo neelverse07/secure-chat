@@ -1,90 +1,39 @@
-const express = require("express")
-const http = require("http")
-const { Server } = require("socket.io")
-const cors = require("cors")
-const multer = require("multer")
-const path = require("path")
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
 
-const app = express()
+const app = express();
+const server = http.createServer(app);
 
-app.use(cors())
-app.use(express.json())
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+});
 
-/* ---------- IMAGE UPLOAD ---------- */
+io.on("connection", (socket) => {
+  console.log("User connected");
 
-const storage = multer.diskStorage({
-destination:"uploads/",
-filename:(req,file,cb)=>{
-cb(null,Date.now()+path.extname(file.originalname))
-}
-})
+  socket.on("joinRoom", ({ username, room }) => {
+    socket.join(room);
+    socket.username = username;
+    socket.room = room;
 
-const upload = multer({storage:storage})
+    console.log(username + " joined " + room);
+  });
 
-app.use("/uploads",express.static("uploads"))
+  socket.on("sendMessage", (message) => {
+    io.to(socket.room).emit("receiveMessage", {
+      username: socket.username,
+      text: message
+    });
+  });
 
-app.post("/upload",upload.single("image"),(req,res)=>{
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
 
-const imageUrl = req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename
-
-res.json({url:imageUrl})
-
-})
-
-/* ---------- SOCKET SERVER ---------- */
-
-const server = http.createServer(app)
-
-const io = new Server(server,{
-cors:{
-origin:"*",
-methods:["GET","POST"]
-}
-})
-
-io.on("connection",(socket)=>{
-
-console.log("User connected:",socket.id)
-
-socket.on("join-room",(room)=>{
-socket.join(room)
-})
-
-socket.on("send-message",(data)=>{
-
-io.to(data.room).emit("receive-message",{
-room:data.room,
-message:data.message,
-sender:data.sender
-})
-
-})
-
-
-socket.on("typing",(room)=>{
-socket.to(room).emit("typing")
-})
-
-socket.on("read",(room)=>{
-socket.to(room).emit("read")
-})
-
-socket.on("disconnect",()=>{
-console.log("User disconnected")
-})
-
-})
-
-/* ---------- ROOT ROUTE ---------- */
-
-app.get("/",(req,res)=>{
-res.send("Secure Couple Chat Server Running")
-})
-
-/* ---------- PORT ---------- */
-
-const PORT = process.env.PORT || 3000
-
-server.listen(PORT,()=>{
-console.log("Server running on port " + PORT)
-})
+server.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
