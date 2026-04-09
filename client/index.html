@@ -5,53 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NeuroChat — Secure</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ IMPORTANT -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="logo-label">SECURE MESSAGING</div>
-  <h1 class="logo-title">NEUROCHAT</h1>
-  <div class="status-badge">🔒 E2E ENCRYPTED</div>
+  <h1>NEUROCHAT</h1>
 
-  <div class="login-card">
-    <div class="field-label">YOUR NAME</div>
-    <input id="username" type="text" placeholder="e.g. Ghost_01" autocomplete="off">
+  <input id="username" placeholder="Enter name">
+  <input id="room" placeholder="Room code">
 
-    <div class="field-label">ROOM CODE</div>
-    <input id="room" type="text" placeholder="e.g. ALPHA-7">
-
-    <button id="enterBtn">+ ENTER ROOM</button>
-  </div>
+  <button id="enterBtn">ENTER</button>
 </div>
 
-<!-- CHAT SCREEN -->
 <div class="chat-container" id="chatScreen">
+  <h2 id="roomName"></h2>
 
-  <div class="chat-header">
-    <div class="room-dot"></div>
+  <div id="chat"></div>
 
-    <div>
-      <div class="room-label">CHANNEL</div>
-      <div id="roomName" class="room-id">—</div>
-    </div>
-
-    <div class="header-right">
-      <span>🔐</span>
-      <span>SECURE</span>
-    </div>
-  </div>
-
-  <div id="chat" class="chat-box"></div>
-
-  <div class="input-area">
-    <input id="messageInput" type="text" placeholder="Type a message...">
-    <button id="sendBtn">➤</button>
-  </div>
-
+  <input id="messageInput" placeholder="Type message">
+  <button id="sendBtn">Send</button>
 </div>
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script src="app.js"></script>
 </body>
 </html>
