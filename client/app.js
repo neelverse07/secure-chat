@@ -1,105 +1,115 @@
-const socket = io("https://secure-chat-es7i.onrender.com", {
-  transports: ["websocket"]
-});
+document.addEventListener("DOMContentLoaded", () => {
 
-const loginScreen = document.getElementById("loginScreen");
-const chatScreen = document.getElementById("chatScreen");
+  let socket;
 
-const enterBtn = document.getElementById("enterBtn");
-const sendBtn = document.getElementById("sendBtn");
-
-const usernameInput = document.getElementById("username");
-const roomInput = document.getElementById("room");
-const messageInput = document.getElementById("messageInput");
-
-const chatBox = document.getElementById("chat");
-const roomName = document.getElementById("roomName");
-
-let myName = "";
-
-// Time
-function getTime() {
-  return new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-// Add message
-function addMessage(text, username, isSelf) {
-  const row = document.createElement("div");
-  row.className = "msg-row " + (isSelf ? "self" : "other");
-
-  const nameEl = document.createElement("div");
-  nameEl.className = "msg-name";
-  nameEl.textContent = username;
-
-  const bubble = document.createElement("div");
-  bubble.className = "msg-bubble";
-  bubble.textContent = text;
-
-  const time = document.createElement("div");
-  time.className = "msg-time";
-  time.textContent = getTime();
-
-  row.appendChild(nameEl);
-  row.appendChild(bubble);
-  row.appendChild(time);
-
-  chatBox.appendChild(row);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// System message
-function addSysMsg(text) {
-  const el = document.createElement("div");
-  el.className = "sys-msg";
-  el.textContent = text;
-  chatBox.appendChild(el);
-}
-
-// ✅ FIXED ENTER ROOM
-enterBtn.addEventListener("click", () => {
-  const name = usernameInput.value.trim();
-  const room = roomInput.value.trim();
-
-  if (!name || !room) {
-    alert("Enter name and room!");
-    return;
+  try {
+    socket = io("https://secure-chat-es7i.onrender.com");
+  } catch (e) {
+    console.log("Socket error:", e);
   }
 
-  myName = name;
+  const loginScreen = document.getElementById("loginScreen");
+  const chatScreen = document.getElementById("chatScreen");
 
-  socket.emit("joinRoom", {
-    username: name,
-    room: room
+  const enterBtn = document.getElementById("enterBtn");
+  const sendBtn = document.getElementById("sendBtn");
+
+  const usernameInput = document.getElementById("username");
+  const roomInput = document.getElementById("room");
+  const messageInput = document.getElementById("messageInput");
+
+  const chatBox = document.getElementById("chat");
+  const roomName = document.getElementById("roomName");
+
+  let myName = "";
+
+  function getTime() {
+    return new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function addMessage(text, username, isSelf) {
+    const row = document.createElement("div");
+    row.className = "msg-row " + (isSelf ? "self" : "other");
+
+    const nameEl = document.createElement("div");
+    nameEl.className = "msg-name";
+    nameEl.textContent = username;
+
+    const bubble = document.createElement("div");
+    bubble.className = "msg-bubble";
+    bubble.textContent = text;
+
+    const time = document.createElement("div");
+    time.className = "msg-time";
+    time.textContent = getTime();
+
+    row.appendChild(nameEl);
+    row.appendChild(bubble);
+    row.appendChild(time);
+
+    chatBox.appendChild(row);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function addSysMsg(text) {
+    const el = document.createElement("div");
+    el.className = "sys-msg";
+    el.textContent = text;
+    chatBox.appendChild(el);
+  }
+
+  // ENTER ROOM
+  enterBtn.addEventListener("click", () => {
+    const name = usernameInput.value.trim();
+    const room = roomInput.value.trim();
+
+    if (!name || !room) {
+      alert("Enter name and room!");
+      return;
+    }
+
+    myName = name;
+
+    if (socket) {
+      socket.emit("joinRoom", { username: name, room: room });
+    }
+
+    roomName.textContent = room.toUpperCase();
+
+    loginScreen.style.display = "none";
+    chatScreen.classList.add("active");
+
+    addSysMsg("🔐 Connected to " + room.toUpperCase());
   });
 
-  roomName.textContent = room.toUpperCase();
+  // SEND MESSAGE
+  sendBtn.addEventListener("click", sendMessage);
 
-  loginScreen.style.display = "none";
-  chatScreen.classList.add("active");
+  messageInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
 
-  addSysMsg("🔐 Connected to " + room.toUpperCase());
-});
+  function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
 
-// Send message
-sendBtn.addEventListener("click", sendMessage);
+    if (socket) {
+      socket.emit("sendMessage", text);
+    }
 
-messageInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+    addMessage(text, myName, true);
 
-function sendMessage() {
-  const text = messageInput.value.trim();
-  if (!text) return;
+    messageInput.value = "";
+  }
 
-  socket.emit("sendMessage", text);
+  // RECEIVE
+  if (socket) {
+    socket.on("receiveMessage", (data) => {
+      addMessage(data.text, data.username, data.username === myName);
+    });
+  }
 
-  messageInput.value = "";
-}
-
-// Receive message
-socket.on("receiveMessage", (data) => {
-  addMessage(data.text, data.username, data.username === myName);
 });
