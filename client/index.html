@@ -3,42 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Secure Chat</title>
-
+  <title>NeuroChat — Secure</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- LOGIN SCREEN -->
-<div class="container" id="loginScreen">
-  <h1>🔒 SECURE CHAT</h1>
-  <p class="status">STATUS: E2E ENCRYPTED</p>
+<div id="loginScreen">
+  <div class="logo-label">SECURE MESSAGING</div>
+  <h1 class="logo-title">NEUROCHAT</h1>
+  <div class="status-badge">&#128274; E2E ENCRYPTED</div>
 
-  <input id="username" type="text" placeholder="Enter your name">
-  <input id="room" type="text" placeholder="Room Code">
-
-  <button id="enterBtn">+ ENTER ROOM</button>
+  <div class="login-card">
+    <div class="field-label">YOUR NAME</div>
+    <input id="username" type="text" placeholder="e.g. Ghost_01" autocomplete="off">
+    <div class="field-label">ROOM CODE</div>
+    <input id="room" type="text" placeholder="e.g. ALPHA-7">
+    <button id="enterBtn">+ ENTER ROOM</button>
+  </div>
 </div>
 
 <!-- CHAT SCREEN -->
 <div class="chat-container" id="chatScreen">
-
   <div class="chat-header">
-    <span id="roomName">Room</span>
-    <span class="secure">🔐 SECURE</span>
+    <div class="room-dot"></div>
+    <div>
+      <div class="room-label">CHANNEL</div>
+      <div id="roomName" class="room-id">—</div>
+    </div>
+    <div class="header-right">
+      <span>&#128274;</span>
+      <span>SECURE</span>
+    </div>
   </div>
 
   <div id="chat" class="chat-box"></div>
 
-  <div class="inputArea">
-    <input id="messageInput" type="text" placeholder="Type message">
-    <button id="sendBtn">Send</button>
+  <div class="input-area">
+    <input id="messageInput" type="text" placeholder="Type a message...">
+    <button id="sendBtn">&#9650;</button>
   </div>
-
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
