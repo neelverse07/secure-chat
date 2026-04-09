@@ -11,7 +11,7 @@ body {
   min-height: 100vh;
 }
 
-/* Background glow */
+/* ✅ FIXED BACKGROUND (NO CLICK BLOCK) */
 body::before {
   content: "";
   position: fixed;
@@ -19,12 +19,11 @@ body::before {
   background:
     radial-gradient(circle at 20% 50%, rgba(0,255,136,0.05), transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(0,180,255,0.05), transparent 50%);
-  
-  z-index: -1;           /* 🔥 IMPORTANT FIX */
-  pointer-events: none;  /* 🔥 VERY IMPORTANT */
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* LOGIN */
+/* ── LOGIN ── */
 #loginScreen {
   display: flex;
   flex-direction: column;
@@ -36,9 +35,9 @@ body::before {
 }
 
 .logo-label {
+  font-size: 11px;
+  letter-spacing: 4px;
   color: #00ff88;
-  font-size: 12px;
-  letter-spacing: 3px;
 }
 
 .logo-title {
@@ -48,25 +47,26 @@ body::before {
 }
 
 .status-badge {
+  font-size: 10px;
   color: #00ff88;
-  font-size: 11px;
   border: 1px solid #00ff88;
-  padding: 5px 12px;
+  padding: 5px 14px;
   border-radius: 20px;
   margin-bottom: 30px;
 }
 
 .login-card {
-  background: #111;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 300px;
 }
 
 .field-label {
   font-size: 10px;
+  color: #aaa;
   margin-bottom: 5px;
-  color: #888;
 }
 
 /* INPUT */
@@ -84,25 +84,33 @@ input {
 button {
   width: 100%;
   padding: 10px;
-  background: #00ff88;
-  border: none;
-  color: black;
+  background: rgba(0,255,136,0.1);
+  border: 1px solid #00ff88;
+  color: #00ff88;
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-/* CHAT */
+button:hover {
+  background: rgba(0,255,136,0.25);
+}
+
+/* ── CHAT ── */
 .chat-container {
   display: none;
   flex-direction: column;
   height: 100vh;
+  position: relative;
+  z-index: 2;
 }
 
 .chat-container.active {
   display: flex;
 }
 
+/* Header */
 .chat-header {
   padding: 15px;
   border-bottom: 1px solid #222;
@@ -123,14 +131,14 @@ button {
   color: #00ff88;
 }
 
-/* CHAT BOX */
+/* Chat box */
 .chat-box {
   flex: 1;
   overflow-y: auto;
   padding: 10px;
 }
 
-/* MESSAGE */
+/* Messages */
 .msg-row {
   max-width: 70%;
   margin-bottom: 10px;
@@ -152,7 +160,8 @@ button {
 
 .msg-bubble {
   padding: 10px;
-  background: #111;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.2);
   border-radius: 6px;
 }
 
@@ -161,14 +170,14 @@ button {
   color: #555;
 }
 
-/* SYSTEM */
+/* System */
 .sys-msg {
   text-align: center;
   font-size: 10px;
   color: #777;
 }
 
-/* INPUT AREA */
+/* Input area */
 .input-area {
   display: flex;
   padding: 10px;
