@@ -12,27 +12,32 @@
 <div id="loginScreen">
   <div class="logo-label">SECURE MESSAGING</div>
   <h1 class="logo-title">NEUROCHAT</h1>
-  <div class="status-badge">&#128274; E2E ENCRYPTED</div>
+  <div class="status-badge">🔒 E2E ENCRYPTED</div>
 
   <div class="login-card">
     <div class="field-label">YOUR NAME</div>
     <input id="username" type="text" placeholder="e.g. Ghost_01" autocomplete="off">
+
     <div class="field-label">ROOM CODE</div>
     <input id="room" type="text" placeholder="e.g. ALPHA-7">
+
     <button id="enterBtn">+ ENTER ROOM</button>
   </div>
 </div>
 
 <!-- CHAT SCREEN -->
 <div class="chat-container" id="chatScreen">
+
   <div class="chat-header">
     <div class="room-dot"></div>
+
     <div>
       <div class="room-label">CHANNEL</div>
       <div id="roomName" class="room-id">—</div>
     </div>
+
     <div class="header-right">
-      <span>&#128274;</span>
+      <span>🔐</span>
       <span>SECURE</span>
     </div>
   </div>
@@ -41,10 +46,13 @@
 
   <div class="input-area">
     <input id="messageInput" type="text" placeholder="Type a message...">
-    <button id="sendBtn">&#9650;</button>
+    <button id="sendBtn">➤</button>
   </div>
+
 </div>
 
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script src="app.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

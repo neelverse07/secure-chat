@@ -1,25 +1,29 @@
+const socket = io("https://secure-chat-es7i.onrender.com");
+
 const loginScreen = document.getElementById("loginScreen");
 const chatScreen = document.getElementById("chatScreen");
+
 const enterBtn = document.getElementById("enterBtn");
 const sendBtn = document.getElementById("sendBtn");
+
 const usernameInput = document.getElementById("username");
 const roomInput = document.getElementById("room");
 const messageInput = document.getElementById("messageInput");
+
 const chatBox = document.getElementById("chat");
 const roomName = document.getElementById("roomName");
 
 let myName = "";
 
-// ── Helpers ──
-
+// Time
 function getTime() {
-  return new Date().toLocaleTimeString("en-US", {
+  return new Date().toLocaleTimeString([], {
     hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
+    minute: "2-digit"
   });
 }
 
+// Add message
 function addMessage(text, username, isSelf) {
   const row = document.createElement("div");
   row.className = "msg-row " + (isSelf ? "self" : "other");
@@ -44,36 +48,38 @@ function addMessage(text, username, isSelf) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// System message
 function addSysMsg(text) {
   const el = document.createElement("div");
   el.className = "sys-msg";
   el.textContent = text;
   chatBox.appendChild(el);
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// ── Enter Room ──
-
+// Enter room
 enterBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
   const room = roomInput.value.trim();
 
   if (!name || !room) {
-    alert("Enter your name and a room code.");
+    alert("Enter name and room!");
     return;
   }
 
   myName = name;
+  socket.emit("joinRoom", {
+    username: name,
+    room: room
+  });
   roomName.textContent = room.toUpperCase();
 
   loginScreen.style.display = "none";
   chatScreen.classList.add("active");
 
-  addSysMsg("Encrypted channel established · " + room.toUpperCase());
+  addSysMsg("🔐 Connected to " + room.toUpperCase());
 });
 
-// ── Send Message ──
-
+// Send message
 sendBtn.addEventListener("click", sendMessage);
 
 messageInput.addEventListener("keypress", (e) => {
@@ -84,6 +90,12 @@ function sendMessage() {
   const text = messageInput.value.trim();
   if (!text) return;
 
+  socket.emit("sendMessage", text);
   addMessage(text, myName, true);
+
   messageInput.value = "";
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
+socket.on("receiveMessage", (data) => {
+  addMessage(data.text, data.username, data.username === myName);
+});
