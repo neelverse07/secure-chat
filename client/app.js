@@ -1,4 +1,6 @@
-const socket = io("https://secure-chat-es7i.onrender.com");
+const socket = io("https://secure-chat-es7i.onrender.com", {
+  transports: ["websocket"]
+});
 
 const loginScreen = document.getElementById("loginScreen");
 const chatScreen = document.getElementById("chatScreen");
@@ -56,7 +58,7 @@ function addSysMsg(text) {
   chatBox.appendChild(el);
 }
 
-// Enter room
+// ✅ FIXED ENTER ROOM
 enterBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
   const room = roomInput.value.trim();
@@ -67,10 +69,12 @@ enterBtn.addEventListener("click", () => {
   }
 
   myName = name;
+
   socket.emit("joinRoom", {
     username: name,
     room: room
   });
+
   roomName.textContent = room.toUpperCase();
 
   loginScreen.style.display = "none";
@@ -91,11 +95,11 @@ function sendMessage() {
   if (!text) return;
 
   socket.emit("sendMessage", text);
-  addMessage(text, myName, true);
 
   messageInput.value = "";
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+// Receive message
 socket.on("receiveMessage", (data) => {
   addMessage(data.text, data.username, data.username === myName);
 });
