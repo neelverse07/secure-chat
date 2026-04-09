@@ -1,47 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secure Couple Chat</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Chat</title>
 
-<link rel="stylesheet" href="style.css">
-
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-💬 Secure Nine Chat
-</header>
+<!-- LOGIN SCREEN -->
+<div class="container" id="loginScreen">
+  <h1>🔒 SECURE CHAT</h1>
+  <p class="status">STATUS: E2E ENCRYPTED</p>
 
-<div class="room">
+  <input id="username" type="text" placeholder="Enter your name">
+  <input id="room" type="text" placeholder="Room Code">
 
-<input id="username" placeholder="Enter your name">
-
-<input id="room" placeholder="Room code">
-
-<button onclick="joinRoom()">Join</button>
-
+  <button id="enterBtn">+ ENTER ROOM</button>
 </div>
 
-<div id="chat"></div>
+<!-- CHAT SCREEN -->
+<div class="chat-container" id="chatScreen">
 
-<div id="typing"></div>
+  <div class="chat-header">
+    <span id="roomName">Room</span>
+    <span class="secure">🔐 SECURE</span>
+  </div>
 
-<div class="inputArea">
+  <div id="chat" class="chat-box"></div>
 
-<input id="message" placeholder="Type message">
-
-<button onclick="sendMessage()">Send</button>
+  <div class="inputArea">
+    <input id="messageInput" type="text" placeholder="Type message">
+    <button id="sendBtn">Send</button>
+  </div>
 
 </div>
 
 <script src="app.js"></script>
 
 </body>
-
-
 </html>

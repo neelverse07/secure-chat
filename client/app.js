@@ -1,82 +1,55 @@
-const socket = io("https://secure-chat-es7i.onrender.com/")
+// Get elements
+const loginScreen = document.getElementById("loginScreen");
+const chatScreen = document.getElementById("chatScreen");
 
-let room = ""
-let username = ""
+const enterBtn = document.getElementById("enterBtn");
+const sendBtn = document.getElementById("sendBtn");
 
-function joinRoom(){
+const usernameInput = document.getElementById("username");
+const roomInput = document.getElementById("room");
+const messageInput = document.getElementById("messageInput");
 
-username = document.getElementById("username").value
-room = document.getElementById("room").value
+const chatBox = document.getElementById("chat");
+const roomName = document.getElementById("roomName");
 
-if(username === "" || room === ""){
-alert("Enter name and room")
-return
+// Enter Room
+enterBtn.addEventListener("click", () => {
+  const name = usernameInput.value.trim();
+  const room = roomInput.value.trim();
+
+  if (!name || !room) {
+    alert("Enter name and room!");
+    return;
+  }
+
+  roomName.textContent = room;
+
+  loginScreen.style.display = "none";
+  chatScreen.classList.add("active");
+});
+
+// Send Message
+sendBtn.addEventListener("click", sendMessage);
+
+// Enter key support
+messageInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
+
+function sendMessage() {
+  const message = messageInput.value.trim();
+
+  if (!message) return;
+
+  const msg = document.createElement("div");
+  msg.className = "message";
+
+  // IMPORTANT FIX (no "M" bug)
+  msg.textContent = message;
+
+  chatBox.appendChild(msg);
+
+  messageInput.value = "";
+
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-socket.emit("join-room",room)
-
-}
-
-function sendMessage(){
-
-let msg = document.getElementById("message").value
-
-if(msg.trim()==="") return
-
-socket.emit("send-message",{
-room:room,
-message:msg,
-sender:username
-})
-
-document.getElementById("message").value=""
-
-}
-
-socket.on("receive-message",(data)=>{
-
-let div = document.createElement("div")
-
-let currentUser = username === data.sender
-
-div.className = currentUser ? "message myMessage" : "message otherMessage"
-
-let time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-
-div.innerHTML = `
-
-<div class="msgHeader">
-<img src="https://api.dicebear.com/7.x/initials/svg?seed=${data.sender}" class="avatar">
-${data.sender}
-</div>
-
-<div class="msgText">${data.message}</div>
-
-<div class="msgFooter">
-<span class="msgTime">${time}</span>
-<span class="ticks">✔✔</span>
-</div>
-`
-
-document.getElementById("chat").appendChild(div)
-
-document.getElementById("chat").scrollTop =
-document.getElementById("chat").scrollHeight
-
-})
-
-document.getElementById("message").addEventListener("input",()=>{
-
-socket.emit("typing",room)
-
-})
-
-socket.on("typing",()=>{
-
-document.getElementById("typing").innerText="Partner typing..."
-
-setTimeout(()=>{
-document.getElementById("typing").innerText=""
-},2000)
-
-})
